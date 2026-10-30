@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart.js Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+
+    <style>
+        * {
+            font-family: "Noto Sans Thai", sans-serif;
+        }
+
+        body {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .footer-container {
+            width: 100vw;
+            height: 35vh;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-detail {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .footer-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+        }
+    </style>
+
+    <div class="container">
+        <div style="width: 100vw;">
+            <button class="btn" style="padding:  20px; border-radius: 15px; margin-top: 15px; margin-left: 15px;"
+                onclick="window.location.href='/history';">ย้อนกลับ</button>
+        </div>
+        <h1>รายละเอียดการล้ม</h1>
+
+        <div class="content-container">
+            <div style="width: 50%;">
+                <div style="display: flex; align-items: center; flex-direction: column;">
+                    <h4>ท่าทางการล้ม: <%=pose%>
+                    </h4>
+                    <img src="/uploads/<%=picture%>" width="50%" alt="fall picture">
+                </div>
+            </div>
+            <div style=" width: 50%;">
+                <div style="display: flex;  align-items: center; flex-direction: column;">
+                    <h4>กราฟแสดงประวัติการล้ม</h4>
+                    <div style="width: 50%; margin: auto;">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                    <br>
+                    <div style="display: flex; justify-content: space-around; width: 30%;">
+                        <button onclick="updateChart('weekly')">รายสัปดาห์</button>
+                        <button onclick="updateChart('monthly')">รายเดือน</button>
+                        <button onclick="updateChart('yearly')">รายปี</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer-container">
+            <div class="footer-detail">
+                <h1>วัน/เดือน/ปี: <%=date%>
+                </h1>
+                <!-- <h1>ไดรับการช่วยเหลือในเวลา: 12:45</h1> -->
+            </div>
+            <div class="footer-btn">
+                <button style="padding: 20px; border-radius: 15px;" onclick="saveAsPDF()">save pdf</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let chart;
+
+        const weeklyData = {
+            labels: ['จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.', 'อา.'],
+            datasets: [{
+                label: 'การล้ม รายสัปดาห์',
+                data: [0, 0, 0, 1, 0, 1, 1],
+                fill: false,
+                tension: 0.1
+            }],
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true // เริ่มต้นแกน Y ที่ 0
+                    }
+                }
+            }
+        };
+
+
+
+        const monthlyData = {
+            labels: ['สัปดาห์ 1', 'สัปดาห์ 2', 'สัปดาห์ 3', 'สัปดาห์ 4'],
+            datasets: [{
+                label: 'การล้ม รายเดือน',
+                data: [3, 0, 0, 0],
+                fill: false,
+                tension: 0.1
+            }]
+        };
+
+        const monthsThai = [
+            'ม.ค.',  // มกราคม
+            'ก.พ.',  // กุมภาพันธ์
+            'มี.ค.',  // มีนาคม
+            'เม.ย.',  // เมษายน
+            'พ.ค.',  // พฤษภาคม
+            'มิ.ย.',  // มิถุนายน
+            'ก.ค.',  // กรกฎาคม
+            'ส.ค.',  // สิงหาคม
+            'ก.ย.',  // กันยายน
+            'ต.ค.',  // ตุลาคม
+            'พ.ย.',  // พฤศจิกายน
+            'ธ.ค.'   // ธันวาคม
+        ];
+
+
+
+        const yearlyData = {
+
+            labels: monthsThai,
+            datasets: [{
+                label: 'การล้ม รายปี',
+                data: [0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0],
+                fill: false,
+                tension: 0.1
+            }]
+        };
+
+        function createChart(data) {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                backgroundColor: [ // สีของกราฟแต่ละแท่ง
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            min: 0, // กำหนดค่าต่ำสุดของแกน Y
+                            max: 5, // กำหนดค่าสูงสุดของแกน Y
+                            ticks: {
+                                stepSize: 1  // กำหนดการเพิ่มค่าทีละ 1
+                            },
+                            title: {
+                                display: true,  // แสดง label ของแกน
+                                text: 'จำนวนครั้งที่ล้ม', // ข้อความของ label
+                                font: {
+                                    size: 16 // ขนาดตัวอักษร
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart(period) {
+            let data;
+            if (period === 'weekly') {
+                data = weeklyData;
+            } else if (period === 'monthly') {
+                data = monthlyData;
+            } else if (period === 'yearly') {
+                data = yearlyData;
+            }
+
+            chart.data = data;
+            chart.update();
+        }
+
+        window.onload = function () {
+            createChart(weeklyData); // Initialize chart with weekly data
+
+        };
+
+    </script>
+
+    <!-- Include html2canvas and jsPDF libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        function saveAsPDF() {
+            const { jsPDF } = window.jspdf;
+
+            // Get the content element
+            const content = document.getElementById('myChart');
+
+            html2canvas(document.body).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+
+                // Create a new jsPDF instance with A4 page size
+                const pdf = new jsPDF('p', 'mm', 'a4'); // 'p' for portrait, 'mm' for millimeters, 'a4' for A4 size
+
+                // Calculate image size and position to fit A4 page
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = canvas.width;
+                const imgHeight = canvas.height;
+
+                // Calculate the scale to fit image on A4 size
+                const scale = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+                const scaledWidth = imgWidth * scale;
+                const scaledHeight = imgHeight * scale;
+
+                // Add the captured image to the PDF
+                pdf.addImage(imgData, 'PNG', 0, 0, scaledWidth, scaledHeight);
+
+                // Save the PDF
+                pdf.save('webpage.pdf');
+            });
+        }
+    </script>
+
+</body>
+
+</html>

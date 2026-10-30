@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fall Detection</title>
+    <link rel="stylesheet" href="stylesheet/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
+</head>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th,
+    tr {
+        color: black;
+        background-color: #f2f2f2;
+    }
+</style>
+
+<body>
+    <div class="nav-container">
+        <button class="btn" onclick="window.location.href='/homepage';">หน้าหลัก</button>
+
+    </div>
+    <div>
+        <h1>ประวัติการล้ม</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <!-- <th>id</th> -->
+                    <th>วันที่และเวลา</th>
+                    <!-- <th>ชื่อผู้สูงอายุ</th> -->
+                    <th>ทิศทางการล้ม</th>
+                    <th>เวลาที่ได้รับการช่วยเหลือ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- วน loop แสดงข้อมูลจาก rows ที่ส่งมาจาก backend -->
+                <% rows.forEach(row => { %>
+                        <tr>
+                            <td><a href="/detail/<%=row.id%>/<%=row.pose%>/<%=row.created_at%>"><%= row.created_at%></a></td>
+                            <td><a href="/detail/<%=row.id%>/<%=row.pose%>/<%=row.created_at%>"><%= row.pose %></a></td>
+                            <td><a href="/detail/<%=row.id%>/<%=row.pose%>/<%=row.created_at%>">13 วินาที</a></td>
+                       </tr>
+               <% }) %>
+
+                <!-- <tr>
+                    <td><a href="#">Fri Aug 30 2024 12:53:30 GMT+0700 (เวลาอินโดจีน)</a></td>
+                    <td><a href="#">ล้มซ้าย</a></td>
+                    <td><a href="#">13 วินาที</a></td>
+                </tr>
+
+                <tr>
+                    <td><a href="#">Fri Aug 30 2024 13:00:00 GMT+0700 (เวลาอินโดจีน)</a></td>
+                    <td><a href="#">ล้มหลัง</a></td>
+                    <td><a href="#">10 วินาที</a></td>
+                </tr> -->
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

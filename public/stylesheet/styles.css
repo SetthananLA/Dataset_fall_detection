@@ -1,0 +1,126 @@
+body{
+    color: white;
+    font-family: "Noto Sans Thai", sans-serif;
+}
+
+.btn{
+    padding: 15px;
+    font-weight: bold;
+    font-size: large;
+    border-radius: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.canvas-warpper {
+    display: flex;
+    width: 700px;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.display-status{
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    width: auto;
+    height: 130px;
+}
+
+.grid-item{ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style for > laptop (max width 1440px) */
+@media screen and (min-width: 1440px) {
+    body {
+        background-color: #1E292F;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #canvas {
+        width: 400px;
+        height: 400px;
+    }
+
+    .canvas-warpper {
+        width: auto;
+    }
+}
+
+/* Style for laptop (max width 1440px) */
+@media screen and (max-width: 1440px) {
+    body {
+        background-color: #1E292F;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #canvas {
+        width: 350px;
+        height: 350px;
+    }
+
+    .canvas-warpper {
+        width: auto;
+    }
+}
+
+/* Style for tablets (max width 768px) */
+@media screen and (max-width: 768px) {
+    body {
+        background-color: #1E292F;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #canvas {
+        width: 300px;
+        height: 300px;
+    }
+
+    .canvas-warpper {
+        width: auto;
+    }
+}
+
+/* Style for smartphones (max width 480px) */
+@media screen and (max-width: 480px) {
+    body {
+        background-color: #1E292F;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #canvas {
+        width: 150px;
+        height: 150px;
+    }
+
+    .canvas-warpper {
+        width: auto;
+    }
+}
+
